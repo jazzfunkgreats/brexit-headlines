@@ -2,7 +2,7 @@
 
 ###################################################
 #
-#	Brexit Headliner Generator
+#	Brexit Headline Generator
 #
 #	Description:
 #		Makes stupid headline puns based on films
@@ -34,5 +34,5 @@ while True:
 		continue
 	if (chosen_title == 'You'):
 		continue
-	print(chosen_title.replace('You', 'EU'))
+	print(chosen_title.replace('You', 'EU').upper())
 	break
