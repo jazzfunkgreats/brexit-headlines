@@ -34,5 +34,9 @@ while True:
 		continue
 	if (chosen_title == 'You'):
 		continue
-	print(chosen_title.replace('You', 'EU').upper())
+	regex = re.compile(r'.*You\w+')
+	if regex.match(chosen_title):
+		print(chosen_title.replace('You', 'EU-').upper())
+	else:
+		print(chosen_title.replace('You', 'EU').upper())
 	break
