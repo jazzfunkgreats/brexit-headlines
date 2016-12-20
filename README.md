@@ -5,6 +5,6 @@ Made in Python, needs the *Requests* and *BeautifulSoup4* modules to run.
 
 Terrible examples include:
 
-- SO EU THINK YOU CAN DANCE
+- SO EU THINK EU CAN DANCE
 - SEE EU IN VALHALLA
 - ARE EU THE ONE?
