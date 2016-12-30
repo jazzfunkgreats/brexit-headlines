@@ -10,7 +10,7 @@
 #
 ###################################################
 
-import requests, random, bs4, re
+import requests, random, bs4, re, tweepy, time
 
 ## 1. Grab the IMDB search results for "You"
 imdb_link = 'http://www.imdb.com/find?q=you&s=tt&ref_=fn_al_tt_mr'
@@ -26,17 +26,33 @@ for elem in elems:
 	title = elem.get_text()
 	titles.append(title)
 
-## 3. Pick a random title and replace 'You' with 'EU'
-while True:
-	num = random.randint(0, len(titles)-1)
-	chosen_title = titles[num]
-	if not 'You' in chosen_title:
-		continue
-	if (chosen_title == 'You'):
-		continue
-	regex = re.compile(r'.*You\w+')
-	if regex.match(chosen_title):
-		print(chosen_title.replace('You', 'EU-').upper())
-	else:
-		print(chosen_title.replace('You', 'EU').upper())
-	break
+## 3. Twitter API things
+CONSUMER_KEY = 'API_KEY'
+CONSUMER_SECRET = 'API_KEY'
+ACCESS_KEY = 'API_KEY'
+ACCESS_SECRET = 'API_KEY'
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
+api = tweepy.API(auth)
+
+spent_titles = []
+for x in titles:
+	## 4. Pick a random title and replace 'You' with 'EU'
+	while True:
+		num = random.randint(0, len(titles)-1)
+		chosen_title = titles[num]
+		if chosen_title in spent_titles:
+			continue
+		if not 'You' in chosen_title:
+			continue
+		if (chosen_title == 'You'):
+			continue
+		regex = re.compile(r'.*You\w+')
+		if regex.match(chosen_title):
+			xmod = chosen_title.replace('You', 'EU-').upper()
+		else:
+			xmod = chosen_title.replace('You', 'EU').upper()
+		spent_titles.append(chosen_title)
+		break
+	api.update_status(status=xmod)
+	time.sleep(900)
