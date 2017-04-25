@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 ###################################################
 #
@@ -10,49 +10,71 @@
 #
 ###################################################
 
-import requests, random, bs4, re, tweepy, time
+import random
+import re
+import requests
+import bs4
+import tweepy
 
 ## 1. Grab the IMDB search results for "You"
-imdb_link = 'http://www.imdb.com/find?q=you&s=tt&ref_=fn_al_tt_mr'
-r = requests.get(imdb_link)
-r.raise_for_status()
-site_data = r.text
-titles = []
+def site_grabber(url):
+    """Pulls site date for given site."""
+    req = requests.get(url)
+    req.raise_for_status()
+    site_data = req.text
+    return site_data
+
+SITE_DATA = site_grabber('http://www.imdb.com/find?q=you&s=tt&ref_=fn_al_tt_mr')
 
 ## 2. Parse the search results and strain out the juicy titles
-soup = bs4.BeautifulSoup(site_data, 'lxml')
-elems = soup.select('.result_text a')
-for elem in elems:
-	title = elem.get_text()
-	titles.append(title)
+def elem_strainer(site_data):
+    """Strains out just titles elements from HTML data."""
+    titles = []
+    soup = bs4.BeautifulSoup(site_data, "html.parser")
+    elems = soup.select('.result_text a')
+    for elem in elems:
+        title = elem.get_text()
+        titles.append(title)
+    return titles
+
+TITLES = elem_strainer(SITE_DATA)
 
 ## 3. Twitter API things
-CONSUMER_KEY = 'API_KEY'
-CONSUMER_SECRET = 'API_KEY'
-ACCESS_KEY = 'API_KEY'
-ACCESS_SECRET = 'API_KEY'
-auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
-api = tweepy.API(auth)
+CONSUMER_KEY = 'gdACHWhzhfntu1I8QPTKsvlif'
+CONSUMER_SECRET = 'Zd5WeWSOotbtQPDbEXzC4t6WqugHRIHZutoXVveoPatKnfteO1'
+ACCESS_KEY = '814845539145646081-dXIeKspt5g1Iv2urqV82uDhBDp1BtKo'
+ACCESS_SECRET = '1mpGJgpdjBceGGY51RUOv2PfEeLVrCpubd5zQrCG43Jpk'
 
-spent_titles = []
-for x in titles:
-	## 4. Pick a random title and replace 'You' with 'EU'
-	while True:
-		num = random.randint(0, len(titles)-1)
-		chosen_title = titles[num]
-		if chosen_title in spent_titles:
-			continue
-		if not 'You' in chosen_title:
-			continue
-		if (chosen_title == 'You'):
-			continue
-		regex = re.compile(r'.*You\w+')
-		if regex.match(chosen_title):
-			xmod = chosen_title.replace('You', 'EU-').upper()
-		else:
-			xmod = chosen_title.replace('You', 'EU').upper()
-		spent_titles.append(chosen_title)
-		break
-	api.update_status(status=xmod)
-	time.sleep(900)
+def twitter_auth():
+    """Return a Twitter authentication object."""
+    auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+    auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
+    api = tweepy.API(auth)
+    return api
+
+API_ACCESS = twitter_auth()
+
+## 4. Pick a random title and replace 'You' with 'EU'
+def post_to_twitter(api, strings):
+    """Posts whatever to Twitter"""
+    spent_titles = []
+    while True:
+        num = random.randint(0, len(strings)-1)
+        chosen_title = strings[num]
+        if chosen_title in spent_titles:
+            continue
+        if not 'You' in chosen_title:
+            continue
+        if chosen_title == 'You':
+            continue
+        regex = re.compile(r'.*You\w+')
+        if regex.match(chosen_title):
+            xmod = chosen_title.replace('You', '#EU -').upper()
+        else:
+            xmod = chosen_title.replace('You', '#EU').upper()
+        spent_titles.append(chosen_title)
+        print(xmod)
+        api.update_status(status=xmod)
+        break
+
+post_to_twitter(API_ACCESS, TITLES)
