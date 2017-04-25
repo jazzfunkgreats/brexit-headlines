@@ -40,10 +40,10 @@ def elem_strainer(site_data):
 TITLES = elem_strainer(SITE_DATA)
 
 ## 3. Twitter API things
-CONSUMER_KEY = ''
-CONSUMER_SECRET = ''
-ACCESS_KEY = ''
-ACCESS_SECRET = ''
+CONSUMER_KEY = '' ## TO REPLACE
+CONSUMER_SECRET = '' ## TO REPLACE
+ACCESS_KEY = '' ## TO REPLACE
+ACCESS_SECRET = '' ## TO REPLACE
 
 def twitter_auth():
     """Return a Twitter authentication object."""
