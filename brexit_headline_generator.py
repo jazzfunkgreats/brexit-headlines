@@ -40,10 +40,10 @@ def elem_strainer(site_data):
 TITLES = elem_strainer(SITE_DATA)
 
 ## 3. Twitter API things
-CONSUMER_KEY = 'gdACHWhzhfntu1I8QPTKsvlif'
-CONSUMER_SECRET = 'Zd5WeWSOotbtQPDbEXzC4t6WqugHRIHZutoXVveoPatKnfteO1'
-ACCESS_KEY = '814845539145646081-dXIeKspt5g1Iv2urqV82uDhBDp1BtKo'
-ACCESS_SECRET = '1mpGJgpdjBceGGY51RUOv2PfEeLVrCpubd5zQrCG43Jpk'
+CONSUMER_KEY = ''
+CONSUMER_SECRET = ''
+ACCESS_KEY = ''
+ACCESS_SECRET = ''
 
 def twitter_auth():
     """Return a Twitter authentication object."""
